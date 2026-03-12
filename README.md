@@ -266,14 +266,17 @@ cmake --build build --config Release -j$(nproc)
 
 ```bash
 # Start the server with CPU/GPU MoE split
-./build/bin/llama-server \
-    -m model.gguf \
+# Replace <model.gguf> with the path to your GGUF file
+llama.cpp/build/bin/llama-server \
+    -m <model.gguf> \
     --n-gpu-layers 999 \
-    --n-cpu-moe 36 \
-    -c 0 -fa \
-    --jinja --reasoning-format none \
-    --host 0.0.0.0 --port 8502 --api-key "$GPT_API_KEY"
+    --n-cpu-moe <N> \
+    -c 0 --flash-attn on \
+    --jinja \
+    --host 0.0.0.0 --port 8502 --api-key "dummy"
 ```
+
+See the model sections below for complete, copy-paste run commands.
 
 The server exposes an **OpenAI-compatible API**, so any OpenAI client library can connect to it.
 
@@ -305,8 +308,9 @@ print(response.choices[0].message.content)
 | `--n-gpu-layers` | Number of layers to offload to GPU (`999` = all non-MoE layers) |
 | `--n-cpu-moe` | Number of MoE blocks to keep on CPU (e.g. `36` = all MoE on CPU) |
 | `-c` | Context length (`0` = model maximum) |
-| `-fa` | Enable flash attention |
+| `--flash-attn` | Enable flash attention |
 | `--host` / `--port` | Server bind address and port |
+| `--jinja` | Enable Jinja chat templates (required for harmony and similar formats) |
 | `--api-key` | API key for authenticating requests |
 
 ### CPU/GPU MoE split explained
@@ -319,12 +323,6 @@ Mixture-of-Experts models have two types of layers: **attention layers** (small,
 | `--n-cpu-moe 28` (8 MoE on GPU) | ~22 GB | ~25–31 tok/s |
 
 This makes it possible to run a 120B parameter model with as little as 8 GB of VRAM and 64 GB of system RAM.
-
-### Environment variables
-
-| Variable | Purpose |
-|----------|----------|
-| `GPT_API_KEY` | API key for llama-server authentication |
 
 ---
 
@@ -349,6 +347,30 @@ A 120B parameter Mixture-of-Experts (MoE) model released by OpenAI. We use the m
 python utils/download_gpt_oss_120b.py
 ```
 
+#### Response format: Harmony
+
+GPT-OSS was trained on OpenAI's [harmony response format](https://github.com/openai/harmony). The model uses internal "channels" (e.g. `analysis` for chain-of-thought, `final` for the actual response). llama.cpp auto-detects and parses harmony, separating thinking into `reasoning_content` and the clean response into `content`.
+
+You can control reasoning effort by adding one of these lines at the **top** of the system prompt:
+
+- `Reasoning: low` — fast responses, minimal thinking
+- `Reasoning: medium` — balanced speed and detail
+- `Reasoning: high` — deep, detailed analysis
+
+#### Run
+
+```bash
+llama.cpp/build/bin/llama-server \
+    -m models/hugging_face/hub/models--ggml-org--gpt-oss-120b-GGUF/snapshots/*/gpt-oss-120b-mxfp4-00001-of-00003.gguf \
+    --n-gpu-layers 999 \
+    --n-cpu-moe 36 \
+    -c 0 --flash-attn on \
+    --jinja \
+    --host 0.0.0.0 --port 8502 --api-key "dummy"
+```
+
+The model has 36 MoE blocks. `--n-cpu-moe 36` keeps all expert layers on CPU (lowest VRAM, ~5 GB). Reduce the value to move MoE blocks to GPU if you have VRAM to spare.
+
 ---
 
 ### Model: Qwen3.5-35B-A3B
@@ -372,4 +394,22 @@ A 35B parameter Mixture-of-Experts vision-language model from Alibaba's Qwen tea
 # Download the GGUF model
 python utils/download_qwen35_35b.py
 ```
+
+#### Response format
+
+Qwen3.5 uses `<think>...</think>` tags for chain-of-thought reasoning (the same convention as DeepSeek). llama.cpp auto-detects this and separates thinking into `reasoning_content`. To disable thinking and get direct responses, add `/no_think` to the end of your user message.
+
+#### Run
+
+```bash
+llama.cpp/build/bin/llama-server \
+    -m models/hugging_face/hub/models--noctrex--Qwen3.5-35B-A3B-MXFP4_MOE-GGUF/snapshots/*/Qwen3.5-35B-A3B-MXFP4_MOE_BF16.gguf \
+    --n-gpu-layers 999 \
+    --n-cpu-moe 40 \
+    -c 0 --flash-attn on \
+    --jinja \
+    --host 0.0.0.0 --port 8502 --api-key "dummy"
+```
+
+The model has 40 MoE blocks. `--n-cpu-moe 40` keeps all expert layers on CPU. This model is much smaller (~22 GB) and faster than GPT-OSS-120B, making it a good choice for consumer hardware.
 
