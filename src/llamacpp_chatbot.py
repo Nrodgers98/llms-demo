@@ -13,11 +13,20 @@ $ llama-server \
 
 import os
 
+from dotenv import load_dotenv
 from openai import OpenAI
 
+load_dotenv()
+
 # Configuration
-api_key = os.environ.get('GPT_API_KEY', 'dummy')
-base_url = os.environ.get('GPT_BASE_URL', 'http://localhost:8502/v1')
+api_key = os.environ.get('PERDRIZET_API_KEY', 'dummy')
+server = os.environ.get('PERDRIZET_URL', 'localhost:8502')
+
+# Build the base URL: use HTTPS for remote servers, HTTP for localhost
+if server.startswith('localhost') or server.startswith('127.'):
+    base_url = f'http://{server}/v1'
+else:
+    base_url = f'https://{server}:9472/v1'
 temperature = 0.7
 
 system_prompt = (
