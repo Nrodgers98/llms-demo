@@ -55,7 +55,9 @@ Quick reference for the tools and libraries used in the demos:
 
 Local inference server - runs models on your machine behind a REST API.
 
-[Documentation](https://github.com/ollama/ollama/blob/main/docs/README.md) · [Model library](https://ollama.com/library) · [API reference](https://github.com/ollama/ollama/blob/main/docs/api.md)
+- [Model library](https://ollama.com/library)
+- [Documentation](https://github.com/ollama/ollama/blob/main/docs/README.md)
+- [API reference](https://github.com/ollama/ollama/blob/main/docs/api.md)
 
 ```bash
 # Install
@@ -77,6 +79,8 @@ ollama run qwen2.5:3b
 ollama rm qwen2.5:3b
 ```
 
+>**Note**: if you are running the demos in this repo via a devcontainer as intended, you do not need to install Ollama. The container environment includes it.
+
 ### Environment variables
 
 | Variable | Purpose |
@@ -90,7 +94,9 @@ ollama rm qwen2.5:3b
 
 Load and run models directly in Python - no server needed.
 
-[Documentation](https://huggingface.co/docs/transformers) · [GitHub](https://github.com/huggingface/transformers) · [Model Hub](https://huggingface.co/models)
+- [Model Hub](https://huggingface.co/models)
+- [Documentation](https://huggingface.co/docs/transformers)
+- [GitHub](https://github.com/huggingface/transformers)
 
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -126,6 +132,15 @@ new_tokens = output[0][inputs['input_ids'].shape[1]:]
 print(tokenizer.decode(new_tokens, skip_special_tokens=True))
 ```
 
+### Key classes
+
+| Class | Purpose |
+|-------|---------|
+| `AutoTokenizer` | Loads the correct tokenizer for any model |
+| `AutoModelForCausalLM` | Loads a causal language model for text generation |
+| `apply_chat_template()` | Formats a list of messages into the model's expected prompt format |
+| `model.generate()` | Runs inference and returns generated token IDs |
+
 ### Environment variables
 
 | Variable | Purpose |
@@ -138,7 +153,9 @@ print(tokenizer.decode(new_tokens, skip_special_tokens=True))
 
 Framework for building LLM applications. Used here for chat message types and the Ollama integration.
 
-[Documentation](https://python.langchain.com/docs/) · [GitHub](https://github.com/langchain-ai/langchain) · [langchain-ollama](https://python.langchain.com/docs/integrations/chat/ollama/)
+- [Documentation](https://python.langchain.com/docs)
+- [langchain-ollama](https://python.langchain.com/docs/integrations/chat/ollama)
+- [Other avalible chat integrations](https://docs.langchain.com/oss/python/integrations/chat)
 
 ```python
 from langchain_ollama import ChatOllama
@@ -177,17 +194,19 @@ response = llm.invoke(messages)
 
 ---
 
-### 4. [Gradio](https://www.gradio.app/)
+### 4. [Gradio](https://www.gradio.app)
 
 Build a web UI for a chatbot with a few lines of code.
 
-[Documentation](https://www.gradio.app/docs/) · [GitHub](https://github.com/gradio-app/gradio) · [ChatInterface guide](https://www.gradio.app/guides/creating-a-chatbot-fast)
+- [Documentation](https://www.gradio.app/docs)
+- [GitHub](https://github.com/gradio-app/gradio)
+- [ChatInterface guide](https://www.gradio.app/guides/creating-a-chatbot-fast)
 
 ```python
 import gradio as gr
 
 def respond(message, history):
-    # message: str — the latest user input
+    # message: str - the latest user input
     # history: list of [user, assistant] pairs
     return 'Hello!'  # return the assistant's reply as a string
 
