@@ -27,11 +27,37 @@ sudo cmake --build build --config Release -j$(nproc)
 ```bash
 # Create model directory
 sudo mkdir -p /opt/models
-
-# Download model (example using GPT-OSS-20B)
-cd /opt/models
-sudo python3 /path/to/llms-demo/utils/download_gpt_oss_20b.py
 ```
+
+Download models using one of these methods:
+
+**Option A: Download on host with HF_HOME set**
+
+```bash
+# Set HF_HOME to download directly to /opt/models
+sudo HF_HOME=/opt/models python3 /path/to/llms-demo/utils/download_gpt_oss_20b.py
+```
+
+**Option B: Copy from dev container**
+
+If you already downloaded models in the dev container:
+
+```bash
+# From your host OS (outside container)
+sudo cp -r /path/to/llms-demo/models/hugging_face /opt/models/
+```
+
+**Option C: Manual download**
+
+Download GGUF files directly from HuggingFace:
+
+```bash
+# Example for GPT-OSS-20B
+cd /opt/models
+sudo wget https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-mxfp4.gguf
+```
+
+> **Note:** The download scripts respect the `HF_HOME` environment variable. Without setting it, models download to `~/.cache/huggingface/` by default.
 
 ### 3. Create service user
 
@@ -124,7 +150,7 @@ sudo systemctl status llamacpp.service
 **GPT-OSS-120B** (120B MoE):
 ```bash
 ExecStart=/opt/llama.cpp/build/bin/llama-server \
-    -m /opt/models/gpt-oss-120b-mxfp4-00001-of-00003.gguf \
+    -m /opt/models/hub/models--ggml-org--gpt-oss-120b-GGUF/snapshots/*/gpt-oss-120b-mxfp4-00001-of-00003.gguf \
     --n-gpu-layers 999 \
     --n-cpu-moe 36 \
     -c 0 \
@@ -140,7 +166,7 @@ ExecStart=/opt/llama.cpp/build/bin/llama-server \
 **GPT-OSS-20B** (21B):
 ```bash
 ExecStart=/opt/llama.cpp/build/bin/llama-server \
-    -m /opt/models/gpt-oss-20b-mxfp4.gguf \
+    -m /opt/models/hub/models--ggml-org--gpt-oss-20b-GGUF/snapshots/*/gpt-oss-20b-mxfp4.gguf \
     --n-gpu-layers 999 \
     -c 8192 \
     --flash-attn on \
@@ -155,7 +181,7 @@ ExecStart=/opt/llama.cpp/build/bin/llama-server \
 **Qwen3.5-35B-A3B** (35B MoE):
 ```bash
 ExecStart=/opt/llama.cpp/build/bin/llama-server \
-    -m /opt/models/Qwen3.5-35B-A3B-MXFP4_MOE_BF16.gguf \
+    -m /opt/models/hub/models--noctrex--Qwen3.5-35B-A3B-MXFP4_MOE-GGUF/snapshots/*/Qwen3.5-35B-A3B-MXFP4_MOE_BF16.gguf \
     --n-gpu-layers 999 \
     --n-cpu-moe 40 \
     -c 0 \

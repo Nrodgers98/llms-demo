@@ -62,7 +62,7 @@ WorkingDirectory=/opt/llama.cpp
 # - Modify --n-cpu-moe value based on your model (see model docs)
 # - Adjust --n-gpu-layers and other flags as needed
 ExecStart=/opt/llama.cpp/build/bin/llama-server \
-    -m /opt/models/hugging_face/hub/models--ggml-org--gpt-oss-20b-GGUF/snapshots/*/gpt-oss-20b-mxfp4.gguf \
+    -m /opt/models/hub/models--ggml-org--gpt-oss-20b-GGUF/snapshots/*/gpt-oss-20b-mxfp4.gguf \
     --n-gpu-layers 999 \
     -c 8192 \
     --flash-attn on \
