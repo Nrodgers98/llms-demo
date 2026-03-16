@@ -186,8 +186,8 @@ with gr.Blocks(title='Multi-backend chatbot') as demo:
     chatbot = gr.ChatInterface(
         fn=respond,
         additional_inputs=[backend_selector, system_prompt_input],
-        clear_btn='🗑️ Clear Conversation',
-        undo_btn='↩️ Undo',
+        clear_btn='Clear Conversation',
+        undo_btn='Undo',
     )
 
 
