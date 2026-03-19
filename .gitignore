@@ -7,4 +7,3 @@ models
 
 # Sphinx documentation build artifacts
 docs/_build/
-docs/_static/
