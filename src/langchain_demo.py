@@ -141,7 +141,7 @@ def demo_sentiment_analysis(text: str, backend: str) -> tuple[str, str]:
         **Key phrases:**
         {chr(10).join(f"- {phrase}" for phrase in result['key_phrases'])}"""
                 
-                explanation = f"""**Chain components:**
+        explanation = f"""**Chain components:**
         1. Prompt template with format instructions
         2. {backend} chat model
         3. JsonOutputParser with Pydantic schema

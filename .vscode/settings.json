@@ -6,6 +6,7 @@
         "dmon",
         "dotenv",
         "dport",
+        "fewshot",
         "firewalld",
         "fullchain",
         "ggml",
