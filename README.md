@@ -129,7 +129,7 @@ ollama serve
 ollama pull qwen2.5:3b
 
 # 3. Run the chatbot
-python src/ollama_chatbot.py
+python demos/chatbots/ollama_chatbot.py
 ```
 
 For complete instructions on all four demos, visit the [documentation](https://gperdrizet.github.io/llms-demo/).

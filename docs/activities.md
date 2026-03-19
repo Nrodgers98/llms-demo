@@ -21,7 +21,7 @@ Practice basic prompting techniques and chain-of-thought reasoning by solving wo
 - Familiarity with Lesson 46 (Prompting fundamentals)
 
 **What you'll use:**
-- Gradio chatbot web interface (`src/gradio_chatbot.py`)
+- Gradio chatbot web interface (`demos/chatbots/gradio_chatbot.py`)
 - System prompt customization
 
 **Location:** `activities/activity_1_word_problems.md`
