@@ -25,10 +25,9 @@ This repository provides hands-on examples and learning resources for working wi
 
 ### Resources included
 
-- **7 demos**: chatbots, LangChain patterns, and a RAG knowledge system
-- **5 slide decks**: covering deployment, prompting, and LangChain
-- **5 activities**: hands-on exercises building on each demo
-- **3 open-source models**: 20B, 35B, and 120B parameter LLMs
+- **8 demos**: chatbots, LangChain patterns, agents, RAG knowledge systems & fine-tuning
+- **7 slide decks**: covering deployment, prompting, and LangChain
+- **6 activities**: hands-on exercises building on each demo
 
 ---
 
